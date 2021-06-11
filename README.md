@@ -20,7 +20,7 @@ You would put the rsio binary here.
 * rsio.conf is a configuration file that rsio.exe reads on startup
 * rsio.json is the manifest file that Firefox reads to get some info about the native application it connects to.
 
-#So how does it work?
+# So how does it work?
 
 [MDN article about native messaging is here](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging), but here's the main points:
 
@@ -59,7 +59,7 @@ If all went well, Firefox will execute the binary.
 
 Messages are passed using standard IO, and are composed of 32bit "header" telling the length of the message, followed by the message payload in valid JSON form. If Firefox receives standard IO that doesn't follow this format, then it will kill the application.
 
-Extensio code doesn't need to worry about any of that. It can just send a string and let Firefox worry about any encoding and/decoding.
+Extension code doesn't need to worry about any of that. It can just send a string and let Firefox worry about any encoding and/decoding.
 
 That 32bit "header" means that your native application cannot must do some encoding/decoding to pass anything to Firefox. It also means you should probably use some library to handle JSON formatted data.
 
@@ -75,7 +75,7 @@ port.postMessage("mirror " + tab.url)
 
 The `mirror` command tells rsio to send the decoded message back to the other browser. If clicked on all went well this should log "mirror <url>" to the console of that extension. NOT the active web content console, you have to use `about:debugging` to read it.
 
-# What command does rsio support
+# What commands does rsio support?
 
 ## ping
 
