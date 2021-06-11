@@ -1,0 +1,7 @@
+{
+  "name": "rsio",
+  "description": "My test module",
+  "type": "stdio",
+  "path": "rsio.exe",
+  "allowed_extensions": ["names@example.org"]
+}
