@@ -270,13 +270,25 @@ fn try_canonical(some: &str) -> std::io::Result<()>{
 	Ok(())
 }
 
-fn compose_command<'a>(path : &'a str, command: &'a str) -> Option<String>{
+struct Runnable{
+	command : String,
+	dir : String
+}
+
+impl Runnable{
+	fn new( a_command : &str, a_directory : &str ) -> Runnable{
+		let base = String::from(a_directory);
+		Runnable{ command: base.clone() + a_command, dir: base  }
+	}
+}
+
+fn compose_command<'a>(path : &'a str, command: &'a str) -> Option<Runnable>{
 	match try_canonical(command){
-		Ok(()) => Some(String::from(command)),
+		Ok(()) => Some(Runnable::new(command,"./")),
 		Err(_) => {
 			let t = String::from(path) + command;
 			match try_canonical(&t){
-				Ok(()) => Some(t),
+				Ok(()) => Some(Runnable::new(command,path)),
 				Err(_) => None
 			}
 		}
@@ -287,14 +299,14 @@ fn do_stuff(config : &Config,task : TaskExecutable) -> () {
 
 	match compose_command(&config.exec_path, &task.command){
 		Some(command) => {
-			let child = std::process::Command::new(&command)
-			.current_dir(&config.exec_path)
+			let child = std::process::Command::new(&command.command)
+			.current_dir(&command.dir)
 			.stdout(std::process::Stdio::null())
 			.args(&task.args)
 			.spawn();
 		
 			match child{
-				Ok(_) => Stout::info("Doing stuff: ", &command),
+				Ok(_) => Stout::info("Doing stuff: ", &command.command),
 				Err(e) => Stout::error("command failed: ",e.kind())
 			};
 			return ()
