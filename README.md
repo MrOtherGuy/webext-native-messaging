@@ -151,6 +151,20 @@ I'm not sure what will happen. Probably a whole bunch of nothing, but don't blam
 
 There isn't currently any way to forward the output of that third-party program launched by rsio back into the extension. 
 
+# Compiling rsio
+
+`cd` into `application` folder and do:
+
+```
+cargo build --target=x86_64-pc-windows-gnu
+```
+
+Only tried on debian runnnig on WSL so no promises how it goes on other platforms.
+
+After you have compiled it successfully, just copy the executable to whereever your `rsio.json` is located.
+
+Note, you can close the old instance from Firefox using the "quit" command after which you can replace the old binary.
+
 # What do I do with this?
 
 I dunno, use your imagination. It's just a learning exercise.
