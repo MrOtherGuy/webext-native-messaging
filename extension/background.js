@@ -30,13 +30,11 @@ function onDis(e){
 restart();
 
 browser.browserAction.onClicked.addListener(() => {
-  //console.log("Sending:  ping");
   browser.tabs.query({active:true,currentWindow:true})
   .then(tabs => { 
     let tab = tabs[0];
     if(tab?.url && tab.url.startsWith("https:")){
-      port.postMessage("dostuff ytdl.exe " + tab.url)
+      port.postMessage("mirror " + tab.url)
     }
   });
-  //port.postMessage("ping");
 });
