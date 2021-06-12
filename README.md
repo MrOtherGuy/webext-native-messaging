@@ -163,13 +163,13 @@ You can do something like this too:
 
 That would run putty.exe if it is found in `<path_to_rsio.exe>/bin/putty.exe` If such file doesn't exist, then rsio tries to launch it from the `exec_path` again.
 
-For the real heroes out there you could try:
+rsio ``dostuff` executes the program as a child process. Thus if rsio terminates, the child process will likely be killed by your OS. Also, if the program you lauch just waits for input before doing anything, then rsio will probably just lock up indefinitely and not respond to any messages from the extension. So, don't launch programs that do that. An example would be:
 
 ```
 >> port.postMessage("dostuff rsio.exe")
 ```
 
-I'm not sure what will happen. Probably a whole bunch of nothing, but don't blame me if it eats your lunch or something.
+A whole bunch of nothing will happen, but rsio will not respond to anything because it waits for response from the child-rsio which itself waits for input from the parent-rsio. 
 
 There isn't currently any way to forward the output of that third-party program launched by rsio back into the extension. 
 
