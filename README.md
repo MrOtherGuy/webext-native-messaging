@@ -33,9 +33,29 @@ The extension requests to connect to a native application. Only a background-scr
 browser.runtime.connectNative("rsio");
 ```
 
-This tells Firefox to go look for a OS specific location for a info about what this "rsio" application is. On Windows, it checks a registry key `HKEY_CURRENT_USER\SOFTWARE\Mozilla\NativeMessagingHosts\rsio`
+This tells Firefox to go look for a OS specific location for a info about what this "rsio" application is. This lookup depends on your OS. [Full MDN documentation is here](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#manifest_location)
+
+### Windows
+
+On Windows, Firefox checks a registry key:
+```
+HKEY_CURRENT_USER\SOFTWARE\Mozilla\NativeMessagingHosts\rsio
+```
 
 The value of that registry key must be an absolute file path to `rsio.json`
+
+### Linux
+
+On Linux, Firefox reads per user json file at:
+```
+~/.mozilla/native-messaging-hosts/rsio.json
+```
+Or system-wide install:
+```
+/usr/lib/mozilla/native-messaging-hosts/rsio.json
+```
+
+## native application manifest
 
 Next, Firefox tries to read that `rsio.json` file. Among other things, the json describes where the actual binary file is. For example:
 
@@ -50,6 +70,8 @@ Next, Firefox tries to read that `rsio.json` file. Among other things, the json 
 ```
 
 The name field might need to be the same as the json file name. The example would make Firefox **lauch** `rsio.exe` from the same path where the json file was found. Note that Firefox will launch the executable, not connect to an already running instance of the application.
+
+On Linux the `path`-key must be absolute path to the executable.
 
 The allowed_extensions field just tells that the native application wwill only receive connection from an extension of that specific ID.
 
@@ -159,7 +181,13 @@ There isn't currently any way to forward the output of that third-party program 
 cargo build --target=x86_64-pc-windows-gnu
 ```
 
-Only tried on debian runnnig on WSL so no promises how it goes on other platforms.
+On Linux a simple should work.
+
+```
+cargo build
+```
+
+Tried on Debian runnnig in WSL, and also stand-alone Fedora 34. No promises how it goes on other platforms.
 
 After you have compiled it successfully, just copy the executable to whereever your `rsio.json` is located.
 
